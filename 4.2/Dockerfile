@@ -51,6 +51,8 @@ RUN cp -a --no-preserve=ownership /etc/pki/ovirt-engine /etc/pki/ovirt-engine.tm
 VOLUME /etc/pki/ovirt-engine
 # Persist this folder to keep the database backups
 VOLUME /var/lib/ovirt-engine/backups
+# put logs somewhere accessible
+VOLUME /var/log/ovirt-engine
 
 # Encrypt host communication
 ENV HOST_ENCRYPT=true
