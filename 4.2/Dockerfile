@@ -15,10 +15,12 @@ ENV POSTGRES_DB engine
 ENV POSTGRES_HOST postgres
 ENV POSTGRES_PORT 5432
 
-# oVirt
+#oVirt -- some default, to override.
 ENV OVIRT_FQDN localhost
+ENV OVIRT_PASSWORD engine
+ENV OVIRT_PKI_ORGANIZATION oVirt
 
-EXPOSE 8080 8443
+EXPOSE 8080 9443
 
 USER root
 
@@ -33,10 +35,6 @@ RUN curl -OL https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_V
 
 # engine-setup needs the link to initctl
 RUN ln -s /usr/sbin/service /usr/bin/initctl
-
-#oVirt
-ENV OVIRT_PASSWORD engine
-ENV OVIRT_PKI_ORGANIZATION oVirt
 
 COPY entrypoint.sh answers.conf.in setup.patch /
 COPY 999-ovirt-engine.conf /etc/ovirt-engine/engine.conf.d/
@@ -74,4 +72,4 @@ ENV OVIRT_ADMIN_UID=49ec00bb-34d9-4cd0-a996-44b88b7c1098
 ENV HTTPS_PORT 9443
 ENV SSO_ALTERNATE_ENGINE_FQDNS="localhost:9443 127.0.0.1:9443"
 
-CMD bash /entrypoint.sh
+ENTRYPOINT bash /entrypoint.sh

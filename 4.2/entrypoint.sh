@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 
 cp -f answers.conf.in answers.conf
 echo OVESETUP_DB/user=str:$POSTGRES_USER >> answers.conf
@@ -7,11 +8,15 @@ echo OVESETUP_DB/password=str:$POSTGRES_PASSWORD >> answers.conf
 echo OVESETUP_DB/database=str:$POSTGRES_DB >> answers.conf
 echo OVESETUP_DB/host=str:$POSTGRES_HOST >> answers.conf
 echo OVESETUP_DB/port=str:$POSTGRES_PORT >> answers.conf
+echo OVESETUP_DWH_DB/host=str:$POSTGRES_HOST >> answers.conf
+echo OVESETUP_DWH_DB/port=int:$POSTGRES_PORT >> answers.conf
+echo OVESETUP_DWH_DB/password=str:$POSTGRES_PASSWORD >> answers.conf
 echo OVESETUP_ENGINE_CONFIG/fqdn=str:$OVIRT_FQDN >> answers.conf
 echo OVESETUP_CONFIG/fqdn=str:$OVIRT_FQDN >> answers.conf
 echo OVESETUP_CONFIG/adminPassword=str:$OVIRT_PASSWORD >> answers.conf
 echo OVESETUP_PKI/organization=str:$OVIRT_PKI_ORGANIZATION >> answers.conf
 echo OVESETUP_CONFIG/adminUserId=str:$OVIRT_ADMIN_UID >> answers.conf
+echo OVESETUP_OVN/ovirtProviderOvnPassword=str:$OVIRT_PASSWORD >> answers.conf
 
 # Copy pki template files into original template location.
 # Mounts on kubernetes hide the original files in the image.
@@ -38,9 +43,9 @@ else
 fi
 
 echo SSO_CALLBACK_PREFIX_CHECK=false >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
-echo "ENGINE_SSO_SERVICE_URL=\"https://localhost:8443/ovirt-engine/sso\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
+echo "ENGINE_SSO_SERVICE_URL=\"https://localhost:9443/ovirt-engine/sso\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
 echo "ENGINE_BASE_URL=\"https://${OVIRT_FQDN}/ovirt-engine/\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
-echo "SSO_ENGINE_URL=\"https://localhost:8443/ovirt-engine/\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
+echo "SSO_ENGINE_URL=\"https://localhost:9443/ovirt-engine/\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
 
 export PGPASSWORD=$POSTGRES_PASSWORD
 
